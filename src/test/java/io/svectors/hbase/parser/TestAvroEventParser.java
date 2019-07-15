@@ -26,6 +26,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.nio.ByteBuffer;
 import java.util.Map;
 
 /**
@@ -43,22 +44,25 @@ public class TestAvroEventParser {
     @Test
     public void testParseValue() {
         final Schema valueSchema = SchemaBuilder.struct().name("record").version(1)
-          .field("url", Schema.STRING_SCHEMA)
-          .field("id", Schema.INT32_SCHEMA)
-          .field("zipcode", Schema.INT32_SCHEMA)
-          .field("status", Schema.BOOLEAN_SCHEMA)
-          .build();
+                .field("url", Schema.STRING_SCHEMA)
+                .field("id", Schema.INT32_SCHEMA)
+                .field("zipcode", Schema.INT32_SCHEMA)
+                .field("status", Schema.BOOLEAN_SCHEMA)
+                .field("age", Schema.INT8_SCHEMA)
+                .build();
 
         String url = "google.com";
         int id = 1;
         int zipcode = 95051;
         boolean status = true;
+        byte age = 12;
 
         final Struct record = new Struct(valueSchema)
-          .put("url", url)
-          .put("id", id)
-          .put("zipcode", zipcode)
-          .put("status", status);
+                .put("url", url)
+                .put("id", id)
+                .put("zipcode", zipcode)
+                .put("status", status)
+                .put("age", age);
 
         final SinkRecord sinkRecord = new SinkRecord("test", 0, null, null, valueSchema, record, 0);
 
@@ -68,6 +72,7 @@ public class TestAvroEventParser {
         Assert.assertEquals(id, Bytes.toInt(result.get("id")));
         Assert.assertEquals(zipcode, Bytes.toInt(result.get("zipcode")));
         Assert.assertEquals(status, Bytes.toBoolean(result.get("status")));
+        Assert.assertEquals(age, result.get("age"));
     }
 
     @Test
