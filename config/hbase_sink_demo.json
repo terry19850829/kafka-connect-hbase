@@ -1,4 +1,5 @@
 {
+
   "name": "hbase_sink_upay_core_merchant__v_1",
   "config": {
     "connector.class": "io.svectors.hbase.sink.HBaseSinkConnector",
@@ -16,5 +17,7 @@
     "hbase.upay_core_merchant.rowkey.columns": "merchant_id,ctime",
     "hbase.upay_core_merchant.rowkey.delimiter": ":",
     "hbase.upay_core_merchant.family": "cf"
+
   }
+
 }
