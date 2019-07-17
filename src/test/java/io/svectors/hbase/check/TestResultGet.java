@@ -58,17 +58,25 @@ public class TestResultGet {
 //                    System.out.println(new String(b, "utf8"));
 //                }
 
-                Get get = new Get("000011dd27c4-9599-1174-4184-e1cfd033".getBytes());
+                Get get = new Get("01106e4a5b20-cd1b-6004-05c0-f79983ad".getBytes());
                 Result r = table.get(get);
                 if (r.isEmpty()) {
                     System.out.println("result is null");
                 } else {
-                    System.out.println(new String(r.getRow()));
-                    System.out.println(Bytes.toLong(r.getValue(CF_DEFAULT.getBytes(), "ctime".getBytes())));
-//                    List<Cell> cellList = r.listCells();
-//                    for (Cell c : cellList) {
-//                        System.out.println(Bytes.toString(CellUtil.cloneQualifier(c)) + ":" + Bytes.toString(CellUtil.cloneValue(c)));
-//                    }
+                    List<Cell> cellList = r.listCells();
+                    for (Cell c : cellList) {
+                        System.out.println(Bytes.toString(CellUtil.cloneQualifier(c)) + ":" + Bytes.toString(CellUtil.cloneValue(c)));
+                    }
+                    System.out.println("ctime:" + Bytes.toLong(r.getValue(CF_DEFAULT.getBytes(), "ctime".getBytes())));
+                    System.out.println("withdraw_mode:" + Bytes.toInt(r.getValue(CF_DEFAULT.getBytes(), "withdraw_mode".getBytes())));
+                    System.out.println("rank:" + Bytes.toInt(r.getValue(CF_DEFAULT.getBytes(), "rank".getBytes())));
+                    System.out.println("status:" + Bytes.toInt(r.getValue(CF_DEFAULT.getBytes(), "status".getBytes())));
+                    System.out.println("legal_person_type:" + Bytes.toInt(r.getValue(CF_DEFAULT.getBytes(), "legal_person_type".getBytes())));
+                    System.out.println("legal_person_id_type:" + Bytes.toInt(r.getValue(CF_DEFAULT.getBytes(), "legal_person_id_type".getBytes())));
+                    System.out.println("bank_account_verify_status:" + Bytes.toInt(r.getValue(CF_DEFAULT.getBytes(), "bank_account_verify_status".getBytes())));
+                    System.out.println("platform:" + Bytes.toInt(r.getValue(CF_DEFAULT.getBytes(), "platform".getBytes())));
+                    System.out.println("version:" + Bytes.toLong(r.getValue(CF_DEFAULT.getBytes(), "version".getBytes())));
+                    System.out.println("extra:" + Bytes.toString(r.getValue(CF_DEFAULT.getBytes(), "extra".getBytes())));
                 }
 
 
