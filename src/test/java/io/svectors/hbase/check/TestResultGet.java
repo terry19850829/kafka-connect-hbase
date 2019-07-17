@@ -6,9 +6,11 @@ import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.filter.CompareFilter;
 import org.apache.hadoop.hbase.filter.PageFilter;
 import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
+import org.apache.hadoop.hbase.util.Bytes;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by terry on 2019/7/16.
@@ -43,27 +45,31 @@ public class TestResultGet {
             try {
 
 
-                Scan scan = new Scan();
-                scan.setFilter(new PageFilter(50));
-                SingleColumnValueFilter scvf = new SingleColumnValueFilter(CF_DEFAULT.getBytes(), "extra".getBytes(), CompareFilter.CompareOp.NOT_EQUAL, "0".getBytes());
-                scvf.setFilterIfMissing(true);
-                scan.setFilter(scvf);
-
-                ResultScanner scanner = table.getScanner(scan);
-                for (Result result : scanner) {
-                    System.out.println(new String(result.getRow()));
-                    byte[] b = result.getValue(CF_DEFAULT.getBytes(), "extra".getBytes());
-                    System.out.println(new String(b, "utf8"));
-                }
-
-//                Get get = new Get("b9fc12fb29c6-b108-5e11-7dce-caa4ee8c".getBytes());
-//                Result r = table.get(get);
-//                if (r.isEmpty()) {
-//                    System.out.println("result is null");
-//                } else {
-//                    System.out.println(new String(r.getRow()));
-//                    System.out.println(r.getValue(CF_DEFAULT.getBytes(), "extra".getBytes()));
+//                Scan scan = new Scan();
+//                scan.setFilter(new PageFilter(50));
+//                SingleColumnValueFilter scvf = new SingleColumnValueFilter(CF_DEFAULT.getBytes(), "extra".getBytes(), CompareFilter.CompareOp.NOT_EQUAL, "0".getBytes());
+//                scvf.setFilterIfMissing(true);
+//                scan.setFilter(scvf);
+//
+//                ResultScanner scanner = table.getScanner(scan);
+//                for (Result result : scanner) {
+//                    System.out.println(new String(result.getRow()));
+//                    byte[] b = result.getValue(CF_DEFAULT.getBytes(), "extra".getBytes());
+//                    System.out.println(new String(b, "utf8"));
 //                }
+
+                Get get = new Get("000011dd27c4-9599-1174-4184-e1cfd033".getBytes());
+                Result r = table.get(get);
+                if (r.isEmpty()) {
+                    System.out.println("result is null");
+                } else {
+                    System.out.println(new String(r.getRow()));
+                    System.out.println(Bytes.toLong(r.getValue(CF_DEFAULT.getBytes(), "ctime".getBytes())));
+//                    List<Cell> cellList = r.listCells();
+//                    for (Cell c : cellList) {
+//                        System.out.println(Bytes.toString(CellUtil.cloneQualifier(c)) + ":" + Bytes.toString(CellUtil.cloneValue(c)));
+//                    }
+                }
 
 
             } finally {

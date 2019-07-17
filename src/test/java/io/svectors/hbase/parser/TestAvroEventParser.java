@@ -49,6 +49,7 @@ public class TestAvroEventParser {
                 .field("zipcode", Schema.INT32_SCHEMA)
                 .field("status", Schema.BOOLEAN_SCHEMA)
                 .field("age", Schema.INT8_SCHEMA)
+                .field("ctime", Schema.INT64_SCHEMA)
                 .build();
 
         String url = "google.com";
@@ -56,23 +57,27 @@ public class TestAvroEventParser {
         int zipcode = 95051;
         boolean status = true;
         byte age = 12;
+        long ctime = 1513934134060L;
 
         final Struct record = new Struct(valueSchema)
                 .put("url", url)
                 .put("id", id)
                 .put("zipcode", zipcode)
                 .put("status", status)
-                .put("age", age);
+                .put("age", age)
+                .put("ctime", ctime);
+
 
         final SinkRecord sinkRecord = new SinkRecord("test", 0, null, null, valueSchema, record, 0);
 
         Map<String, byte[]> result = eventParser.parseValue(sinkRecord);
-        Assert.assertEquals(4, result.size());
+        Assert.assertEquals(6, result.size());
         Assert.assertEquals(url, Bytes.toString(result.get("url")));
         Assert.assertEquals(id, Bytes.toInt(result.get("id")));
         Assert.assertEquals(zipcode, Bytes.toInt(result.get("zipcode")));
         Assert.assertEquals(status, Bytes.toBoolean(result.get("status")));
-        Assert.assertEquals(age, result.get("age"));
+        Assert.assertEquals(age, Bytes.toInt(result.get("age")));
+        Assert.assertEquals(ctime, Bytes.toLong(result.get("ctime")));
     }
 
     @Test
